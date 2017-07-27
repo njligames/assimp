@@ -3,7 +3,8 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2016, assimp team
+Copyright (c) 2006-2017, assimp team
+
 
 All rights reserved.
 
@@ -52,9 +53,8 @@ Here we implement only the C++ interface (Assimp::Exporter).
 
 #ifndef ASSIMP_BUILD_NO_EXPORT
 
-#include "DefaultIOSystem.h"
 #include "BlobIOSystem.h"
-#include "SceneCombiner.h"
+#include <assimp/SceneCombiner.h>
 #include "BaseProcess.h"
 #include "Importer.h" // need this for GetPostProcessingStepInstanceList()
 
@@ -64,11 +64,12 @@ Here we implement only the C++ interface (Assimp::Exporter).
 #include "Exceptional.h"
 #include "ScenePrivate.h"
 #include <memory>
+
+#include <assimp/DefaultIOSystem.h>
 #include <assimp/Exporter.hpp>
 #include <assimp/mesh.h>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-#include <memory>
 
 namespace Assimp {
 
@@ -171,8 +172,10 @@ public:
         GetPostProcessingStepInstanceList(mPostProcessingSteps);
 
         // grab all built-in exporters
-        mExporters.resize(ASSIMP_NUM_EXPORTERS);
-        std::copy(gExporters,gExporters+ASSIMP_NUM_EXPORTERS,mExporters.begin());
+        if ( 0 != ( ASSIMP_NUM_EXPORTERS ) ) {
+            mExporters.resize( ASSIMP_NUM_EXPORTERS );
+            std::copy( gExporters, gExporters + ASSIMP_NUM_EXPORTERS, mExporters.begin() );
+        }
     }
 
     ~ExporterPimpl()
@@ -186,7 +189,6 @@ public:
     }
 
 public:
-
     aiExportDataBlob* blob;
     std::shared_ptr< Assimp::IOSystem > mIOSystem;
     bool mIsDefaultIOHandler;
@@ -235,7 +237,7 @@ bool Exporter::IsDefaultIOHandler() const {
 }
 
 // ------------------------------------------------------------------------------------------------
-const aiExportDataBlob* Exporter::ExportToBlob( const aiScene* pScene, const char* pFormatId, 
+const aiExportDataBlob* Exporter::ExportToBlob( const aiScene* pScene, const char* pFormatId,
                                                 unsigned int, const ExportProperties* pProperties ) {
     if (pimpl->blob) {
         delete pimpl->blob;
@@ -407,6 +409,7 @@ aiReturn Exporter::Export( const aiScene* pScene, const char* pFormatId, const c
 
     pimpl->mError = std::string("Found no exporter to handle this file format: ") + pFormatId;
     ASSIMP_END_EXCEPTION_REGION(aiReturn);
+    
     return AI_FAILURE;
 }
 
@@ -490,7 +493,6 @@ ExportProperties::ExportProperties(const ExportProperties &other)
 , mMatrixProperties(other.mMatrixProperties) {
     // empty
 }
-
 
 // ------------------------------------------------------------------------------------------------
 // Set a configuration property

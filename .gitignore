@@ -82,3 +82,4 @@ lib64/assimp-vc120-mtd.exp
 lib64/assimp-vc120-mt.exp
 xcuserdata
 *.DS_Store
+_build/
