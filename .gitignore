@@ -83,3 +83,12 @@ lib64/assimp-vc120-mt.exp
 xcuserdata
 *.DS_Store
 _build/
+
+Debug-appletvos/
+Debug-appletvsimulator/
+Debug-iphoneos/
+Debug-iphonesimulator/
+Release-appletvos/
+Release-appletvsimulator/
+Release-iphoneos/
+Release-iphonesimulator/
